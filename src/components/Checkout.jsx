@@ -4,6 +4,14 @@ import Input from "./UI/Input";
 import Modal from "./UI/Modal";
 import CartContext from "../store/CartContext";
 
+const validNumber = (input) => {
+    return /^\d+$/.test(input);
+}
+
+const validName = (input) => {
+    return /^[A-Za-z]+(?:\s+[A-Za-z]+)*$/.test(input);
+}
+
 const Checkout = ({ isCheckoutOpen, setIsCartOpen, setIsCheckoutOpen }) => {
 
     const cartCtx = useContext(CartContext);
@@ -17,6 +25,16 @@ const Checkout = ({ isCheckoutOpen, setIsCartOpen, setIsCheckoutOpen }) => {
         const fd = new FormData(event.target);
         const customerData = Object.fromEntries(fd.entries());
         
+        if (!validName(customerData.name)) {
+            alert("Please enter a valid name.");
+            return;
+        }
+
+        if (!validNumber(customerData.mobileNumber)) {
+            alert("Please enter a valid mobile number.");
+            return;
+        }
+
         const order = {
             items: cartCtx.items,
             customer: customerData,
